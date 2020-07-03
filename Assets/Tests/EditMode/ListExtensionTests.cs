@@ -80,21 +80,21 @@ namespace R4ZE.Tests
         }
 
         [Test]
-        public void TestIsNullOrEmptz_EmptyList_True()
+        public void TestIsNullOrEmpty_EmptyList_True()
         {
             List<string> testList = new List<string>();
             Assert.IsTrue(testList.IsNullOrEmpty());
         }
 
         [Test]
-        public void TestIsNullOrEmptz_NullList_True()
+        public void TestIsNullOrEmpty_NullList_True()
         {
             List<string> testList = null;
             Assert.IsTrue(testList.IsNullOrEmpty());
         }
 
         [Test]
-        public void TestIsNullOrEmptz_FilledList_False()
+        public void TestIsNullOrEmpty_FilledList_False()
         {
             List<int> testList = new List<int>(){ 1, 2, 3};
             Assert.IsFalse(testList.IsNullOrEmpty());
