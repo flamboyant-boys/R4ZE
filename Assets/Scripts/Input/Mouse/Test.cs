@@ -1,4 +1,5 @@
 ﻿using R4ZE.Extensions;
+using R4ZE.ModularBlock;
 using R4ZE.ModularBlock.Blocks;
 using R4ZE.ModularBlock.Interfaces;
 using System;
@@ -10,8 +11,15 @@ public class Test : MonoBehaviour
 {
     public GameObject objForCreation;
 
+    public GameObject testObj;
+
     private void Update()
     {
+        if (testObj != null)
+        {
+            DebugDirections(testObj.transform);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -19,32 +27,31 @@ public class Test : MonoBehaviour
             if(Physics.Raycast(ray, out RaycastHit hit))
             {
                 if (hit.transform == null) return;
-                createNewBlock(hit.transform.position, hit.normal, objForCreation, hit.transform);
+                testObj = ModularBlockPlacer.CreateNewBlock(hit.transform.position, hit.normal, objForCreation, hit.transform);
             }  
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform == null) return;
+                ModularBlockPlacer.RemoveModularBlock(hit.transform.gameObject);
+                Destroy(hit.transform.gameObject);
+            }
         }
     }
 
-    private GameObject createNewBlock(Vector3 initCubePosition, Vector3 direction, GameObject obj, Transform parent)
+    private void DebugDirections(Transform newBlock)
     {
-        Vector3 newPosition = initCubePosition + direction;
-        GameObject instantiatedObj = GameObject.Instantiate(obj, newPosition, Quaternion.identity, parent);
-
-        BaseBlock newModularBlock = instantiatedObj.GetComponent<BaseBlock>();
-        BaseBlock parentModularBlock = parent.GetComponent<BaseBlock>();
-
-        if (newModularBlock != null && parentModularBlock != null)
-        {
-            newModularBlock.AddBlock(parentModularBlock, (direction * -1).ConvertToEDirection());
-            parentModularBlock.AddBlock(newModularBlock, direction.ConvertToEDirection());
-
-            if(newModularBlock is TestBlock && parentModularBlock is TestBlock)
-            {
-                (newModularBlock as TestBlock).UpdateBaseBlockDebug();
-                (parentModularBlock as TestBlock).UpdateBaseBlockDebug();
-            }
-        }
-
-        return instantiatedObj;
+        Debug.DrawRay(newBlock.position, newBlock.up * 0.65f, Color.red);
+        Debug.DrawRay(newBlock.position, -newBlock.up * 0.65f, Color.red);
+        Debug.DrawRay(newBlock.position, newBlock.right * 0.65f, Color.red);
+        Debug.DrawRay(newBlock.position, -newBlock.right * 0.65f, Color.red);
+        Debug.DrawRay(newBlock.position, newBlock.forward * 0.65f, Color.red);
+        Debug.DrawRay(newBlock.position, -newBlock.forward * 0.65f, Color.red);
     }
 
 }

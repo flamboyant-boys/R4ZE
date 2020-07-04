@@ -24,5 +24,17 @@ namespace R4ZE.ModularBlock.Blocks
                 connectedBlocks[index] = block;
             }
         }
+
+        public void RemoveBlock(IBlock block, EDirection direction)
+        {
+            if (direction == EDirection.NONE || block == null) return;
+
+            int index = (int)direction;
+
+            if (connectedBlocks[index] == null && connectedBlocks[index] != block)
+            {
+                connectedBlocks[index] = null;
+            }
+        }
     }
 }
